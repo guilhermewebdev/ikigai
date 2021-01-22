@@ -7,7 +7,7 @@ export default function Home() {
   const [input, setInput] = useState('');
   function handlerSubmit(event){
     event.preventDefault();
-    if(input && !/^[ ]{1,}$/.test(input)){
+    if(input && !/^[ ]{1,}$/.test(input) && !list.includes(input)){
       list.push(input)
       setList(list)
       setInput('')
@@ -15,6 +15,11 @@ export default function Home() {
   }
   function changeForm(event){
     setInput(event.target.value)
+  }
+  function removeItem(item){
+    if(item >= 0 && item < list.length){
+        setList(list.filter((value, index) => index !== item))
+    }
   }
   return (
     <div className={styles.container}>
@@ -27,16 +32,22 @@ export default function Home() {
       </header>
       <main className={styles.main}>
         <section>
-          <ul>
-            {list.map(item => (
-              <li>{item}</li>
+          <ul className={styles.list}>
+            {list.map((item, index) => (
+              <li className={styles.item}>
+                <span>{item} </span>
+                <button className={styles.removeButton} onClick={() => removeItem(index)}>&times;</button>
+              </li>
             ))}
           </ul>
         </section>
         <form onSubmit onSubmit={handlerSubmit}>
-          <input value={input} onChange={changeForm} />
-          <button>Adicionar</button>
+          <input className={styles.input} value={input} onChange={changeForm} />
+          <button className={styles.btn} type={"submit"}>Adicionar</button>
+          <button className={styles.btn} type={'button'} onClick={() => setList([])}>Limpar</button>
         </form>
+        <section>
+        </section>
       </main>
 
       <footer className={styles.footer}>
